@@ -27,27 +27,30 @@ public class StudentController {
 	@PostMapping("checkstudentlogin")
 	public ModelAndView login(HttpServletRequest request) {
 
-		ModelAndView mv = new ModelAndView();
-		long id = Long.parseLong(request.getParameter("id"));
-		String password = request.getParameter("password");
+	    ModelAndView mv = new ModelAndView();
+	    long id = Long.parseLong(request.getParameter("id"));
+	    String password = request.getParameter("password");
 
-		Student st = studentService.studentLogin(id, password);
-		if (st != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("student", st);
-			if (st.getStatus().equals("NA")) {
-				mv.setViewName("studentdetails");
-			} else {
-				mv.setViewName("studenthome");
-			}
-
-		} else {
-			mv.setViewName("studentlogin");
-			String error = "Invalid Credentials";
-			mv.addObject("error", error);
-		}
-		return mv;
+	    Student st = studentService.studentLogin(id, password);
+	    if (st != null) {
+	        HttpSession session = request.getSession();
+	        session.setAttribute("student", st);
+	        if (st.getStatus().equals("NA")) {
+	           
+	            mv.setViewName("redirect:/studentdetails");
+	        } else {
+	           
+	            mv.setViewName("redirect:/studenthome");
+	        }
+	    } else {
+	       
+	        mv.setViewName("studentlogin");
+	        String error = "Invalid Credentials";
+	        mv.addObject("error", error);
+	    }
+	    return mv;
 	}
+
 
 	@PostMapping("updatestudentdetails")
 	public ModelAndView updateStudentDetails(HttpServletRequest request) {
@@ -65,6 +68,8 @@ public class StudentController {
 		Student st = new Student(id, name, fatherName, motherName, contact, address, password, status);
 		
 		if(studentService.updateStudent(st)) {
+			 HttpSession session = request.getSession();
+		        session.setAttribute("student", st);
 			mv.setViewName("studenthome");
 		}else {
 			mv.setViewName("studentdetails");
@@ -74,4 +79,23 @@ public class StudentController {
 		return mv;
 	}
 
+	@GetMapping("studenthome")
+	public ModelAndView StudentHome() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("studenthome");
+		return mv;
+	}
+	
+	@GetMapping("studentdetails")
+	public ModelAndView StudentDetails() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("studentdetails");
+		return mv;
+	}
+	@GetMapping("studentprofile")
+	public ModelAndView StudentProfile() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("studentprofile");
+		return mv;
+	}
 }

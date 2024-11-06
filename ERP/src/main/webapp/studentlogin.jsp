@@ -122,7 +122,7 @@
         <div class="bg-right">    
             <div class="login-form">
                 <h2><i class="fas fa-user icon"></i>Login</h2>
-                <form action="studentlogin" method="post">
+                <form action="checkstudentlogin" method="post">
                     <input type="text" id="id" name="id" placeholder="ID" required>
                     <input type="password" id="password" name="password" placeholder="Password" required>
                     <input type="submit" value="Login">
